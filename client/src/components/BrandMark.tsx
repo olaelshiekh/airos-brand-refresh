@@ -1,19 +1,11 @@
 /**
- * Terra-Tech Atlas: The orbital seed mark stays separate from the custom wordmark so the
- * AI-ROS identity reads as an ecosystem marker rather than a generic technology logo.
+ * Terra-Tech Atlas: The official AI-ROS neural-core wordmark is preserved exactly as supplied
+ * and used as the primary brand anchor across the global navigation and footer.
  */
 export function BrandMark({ inverse = false }: { inverse?: boolean }) {
   return (
     <span className={`brand-lockup ${inverse ? "brand-lockup--inverse" : ""}`}>
-      <img
-        className="brand-lockup__mark"
-        src="/manus-storage/airos-orbital-seed-mark_b82c149f.png"
-        alt=""
-      />
-      <span className="brand-lockup__wordmark" aria-label="AI-ROS">
-        AI<span>·</span>ROS
-      </span>
+      <img className="brand-lockup__logo" src="/manus-storage/airos-logo-white_7be22606.png" alt="AI-ROS" />
     </span>
   );
 }
-

@@ -1,7 +1,7 @@
 /**
  * Terra-Tech Atlas: A learning-atlas layout with asymmetrical programme waypoints, cream
- * editorial panels, and an embedded contour-field visual system. Deep Navy provides the
- * technical ground; Warm Taupe and Atlas Gold mark human and directional moments.
+ * editorial panels, and an embedded contour-field visual system. The official AI-ROS logo and
+ * neural-core motif anchor the identity, while Deep Navy, Warm Taupe, and Atlas Gold set its tone.
  */
 import {
   ArrowDown,
@@ -249,7 +249,7 @@ export default function Trainings() {
 
         <section className="cta-section" id="contact" aria-labelledby="cta-title">
           <div className="cta-section__signal">Ready when you are</div>
-          <img className="cta-section__seed" src="/manus-storage/airos-orbital-seed-mark_b82c149f.png" alt="" aria-hidden="true" />
+          <img className="cta-section__seed" src="/manus-storage/airos-favicon_f2875ae6.png" alt="" aria-hidden="true" />
           <div>
             <p className="eyebrow eyebrow--gold">Make the next move deliberate</p>
             <h2 id="cta-title">Tell us where you want AI to take you.</h2>

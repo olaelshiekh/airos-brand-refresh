@@ -61,7 +61,7 @@ Headlines are decisive and directional; CTAs are specific and active; microcopy 
 > “Choose a learning route”
 
 ### Wordmark & Logo
-Use an abstract, text-free **orbital seed mark**: a gold center point enclosed by navy contour rings and an asymmetric taupe orbit. It suggests both a neural node and an evolving ecosystem. The logo stays independent of the wordmark and remains crisp at favicon scale.
+Use the **existing official AI-ROS wordmark** as the anchor of the identity. Its central neural-core symbol becomes the recurring visual cue in route endpoints, compact coordinate markers, and the favicon, while the complete logo is retained in the header and footer without altering its proportions.
 
 ### Signature Brand Color
 **Atlas Gold — #C9A959**
@@ -70,4 +70,4 @@ Use an abstract, text-free **orbital seed mark**: a gold center point enclosed b
 
 - The contour and coordinate system will operate as functional wayfinding in every major zone: programme portfolio, learning pathway, programme details, comparison, and final action—not merely as hero decoration.
 - Programme imagery is governed by a single **Terra-Tech Atlas** art direction: tactile mapped environments, human learning or working contexts, terrain and data overlays, and warm technical materials.
-- The orbital seed mark will recur as the primary brand signal at learning-route markers, section waypoints, programme identifiers, and the final conversion moment.
+- The official AI-ROS neural-core mark will recur as the primary brand signal at learning-route markers, section waypoints, programme identifiers, and the final conversion moment.
