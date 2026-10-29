@@ -16,7 +16,8 @@ import {
   InquiryLink,
   SectionTitle,
 } from "@/components/BrandSections";
-import { ecosystem, solutions } from "@/lib/site-content";
+import { AtlasContours } from "@/components/OriginalVisuals";
+import { ecosystem, featuredProjects, solutions } from "@/lib/site-content";
 
 export function PageHero({
   kicker,
@@ -29,6 +30,9 @@ export function PageHero({
 }) {
   return (
     <section className="page-hero airos-grid-bg">
+      <div className="hero-route-backdrop" aria-hidden="true">
+        <AtlasContours />
+      </div>
       <div className="shell">
         <p className="airos-kicker">{kicker}</p>
         <h1>{title}</h1>
@@ -503,6 +507,70 @@ export function ContactPage() {
           </div>
         </div>
       </section>
+    </>
+  );
+}
+
+export function ProjectsPage() {
+  return (
+    <>
+      <PageHero
+        kicker="FEATURED PROJECTS"
+        title={
+          <>
+            Real-world challenges.
+            <br />
+            <span className="airos-gradient-text">Applied AI.</span>
+          </>
+        }
+        description="Selected projects listed on the original AI-ROS website, presented with their image-led stories and no unverified performance figures."
+      />
+      <section className="section project-catalog-section">
+        <div className="shell">
+          <div className="project-catalog-grid">
+            {featuredProjects.map((project, index) => (
+              <article
+                className="project-catalog-card airos-card"
+                id={`project-${index + 1}`}
+                key={project.title}
+              >
+                <div className="project-catalog-media">
+                  <img
+                    src={project.image}
+                    alt={project.imageAlt}
+                    loading="lazy"
+                  />
+                  <span className="project-visual-index">
+                    0{index + 1} / 0{featuredProjects.length}
+                  </span>
+                  <span className="project-visual-category">
+                    {project.category}
+                  </span>
+                </div>
+                <div className="project-catalog-copy">
+                  <p className="airos-kicker">{project.category}</p>
+                  <h2>{project.title}</h2>
+                  <p>{project.description}</p>
+                  <div className="project-visual-tags">
+                    {project.tags.map(tag => (
+                      <span key={tag}>{tag}</span>
+                    ))}
+                  </div>
+                  <InquiryLink subject={project.title}>
+                    Discuss a similar challenge
+                  </InquiryLink>
+                </div>
+              </article>
+            ))}
+          </div>
+          <p className="project-catalog-note">
+            Project titles and descriptions are retained from the live AI-ROS
+            website. Visuals are illustrative and no performance statistics are
+            presented.
+          </p>
+        </div>
+      </section>
+      <ContactBand />
     </>
   );
 }

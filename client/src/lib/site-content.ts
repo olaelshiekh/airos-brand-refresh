@@ -8,10 +8,21 @@ import {
 export const brandAssets = {
   logo: "/manus-storage/airos-logo_d5de32ee.png",
   mark: "/manus-storage/airos-mark_637af318.png",
+  originalVisuals: {
+    aiStrategy: "/manus-storage/ai-strategy_e7f82735.webp",
+    robotics: "/manus-storage/robotics_e7b0afcf.webp",
+    cloudData: "/manus-storage/cloud-data_8f57b364.webp",
+    researchLab: "/manus-storage/research-lab_6de0a99d.webp",
+    academy: "/manus-storage/academy_bf411e6c.webp",
+    agritech: "/manus-storage/agritech-project_dc6da0dd.webp",
+    learning: "/manus-storage/cozy-earth-interior_3d7f6ce3.webp",
+    industry: "/manus-storage/industry-project_ef14644a.webp",
+  },
 };
 
 export const navigation = [
   { label: "Solutions", href: "/solutions" },
+  { label: "Projects", href: "/projects" },
   { label: "Academy", href: "/academy" },
   { label: "Events", href: "/events" },
   { label: "About", href: "/about" },
@@ -137,6 +148,8 @@ export const programmes = [
   {
     id: "accelerator",
     number: "01",
+    image: brandAssets.originalVisuals.academy,
+    imageAlt: "People learning together in a technology classroom",
     title: "AI Career Accelerator",
     duration: "3–6 months",
     audience: "Professionals & students",
@@ -151,6 +164,8 @@ export const programmes = [
   {
     id: "automation",
     number: "02",
+    image: brandAssets.originalVisuals.aiStrategy,
+    imageAlt: "Artificial intelligence concepts on a digital display",
     title: "AI Automation",
     duration: "3 weeks",
     audience: "Teams & professionals",
@@ -165,6 +180,8 @@ export const programmes = [
   {
     id: "impact",
     number: "03",
+    image: brandAssets.originalVisuals.agritech,
+    imageAlt: "Agricultural fields viewed from above",
     title: "AI & Social Entrepreneurship",
     duration: "Customisable",
     audience: "Startups & organisations",
@@ -203,6 +220,93 @@ export const events = [
   },
 ];
 
+// The live-site capability portfolio, re-presented as a scroll-driven route sequence.
+export const capabilityStories = [
+  {
+    title: "Computer Vision & Edge Intelligence",
+    label: "See more clearly at the edge",
+    description:
+      "Explore on-device computer vision and pattern recognition for industrial and field environments.",
+    tags: ["Computer vision", "Edge AI"],
+    image: brandAssets.originalVisuals.aiStrategy,
+    imageAlt: "A humanoid robot prototype seated at a workbench",
+  },
+  {
+    title: "Autonomous Robotics & ROS 2 Fleet",
+    label: "Navigation, sensing and coordinated motion",
+    description:
+      "Explore ROS 2, LiDAR-SLAM, obstacle avoidance and fleet telemetry for autonomous rover platforms.",
+    tags: ["ROS 2", "LiDAR-SLAM"],
+    image: brandAssets.originalVisuals.robotics,
+    imageAlt: "A robotics platform with a compact autonomous robot",
+  },
+  {
+    title: "Precision Agritech & Resource AI",
+    label: "Make resource decisions with better context",
+    description:
+      "Combine connected field sensors and predictive analysis to support irrigation planning, soil health and resource stewardship.",
+    tags: ["Agritech", "Soil IoT"],
+    image: brandAssets.originalVisuals.agritech,
+    imageAlt: "Agricultural field rows viewed from above",
+  },
+  {
+    title: "Autonomous Agents & Operations AI",
+    label: "Move from information to a useful next step",
+    description:
+      "Connect knowledge and enterprise systems to support multi-step operational workflows, with people in control.",
+    tags: ["AI Agents", "Enterprise workflows"],
+    image: brandAssets.originalVisuals.cloudData,
+    imageAlt: "An analytics dashboard displayed on a screen",
+  },
+  {
+    title: "Smart Mobility & Urban Intelligence",
+    label: "Understand movement across connected systems",
+    description:
+      "Explore urban data and computer-vision approaches for understanding traffic patterns and planning more informed mobility decisions.",
+    tags: ["Urban data", "Mobility AI"],
+    image: brandAssets.originalVisuals.researchLab,
+    imageAlt: "A technology research environment with measurement equipment",
+  },
+  {
+    title: "AI Capacity Building & Academy",
+    label: "Build capability alongside the technology",
+    description:
+      "Develop practical AI skills through focused training pathways and hands-on learning for professionals and teams.",
+    tags: ["AI training", "Capacity building"],
+    image: brandAssets.originalVisuals.academy,
+    imageAlt: "People learning together in a technology classroom",
+  },
+];
+
+// Projects and descriptions carried over from the live AI-ROS website; no results metrics added.
+export const featuredProjects = [
+  {
+    title: "GROW+ Smart Plant Doctor",
+    category: "Agritech",
+    description: "AI-powered plant disease detection platform.",
+    tags: ["IoT", "Drones", "Edge computing"],
+    image: brandAssets.originalVisuals.agritech,
+    imageAlt: "Agricultural field rows viewed from above",
+  },
+  {
+    title: "Cozy Earth Air Quality System",
+    category: "Environment",
+    description: "VR-powered plant recommendation engine.",
+    tags: ["AI sensors", "Edge computing", "Sustainability"],
+    image: brandAssets.originalVisuals.learning,
+    imageAlt: "A living room filled with potted houseplants and natural light",
+  },
+  {
+    title: "Industrial Predictive Maintenance Platform",
+    category: "Industrial AI",
+    description:
+      "A machine-learning platform for equipment-failure prediction.",
+    tags: ["IoT", "Machine learning", "Edge computing"],
+    image: brandAssets.originalVisuals.industry,
+    imageAlt: "An engineer working with industrial equipment",
+  },
+];
+
 export const ecosystem = [
   "The Knowledge Academy",
   "ZAKA",
@@ -212,4 +316,23 @@ export const ecosystem = [
   "ITIDA",
   "SDAIA",
   "AI for Good",
+];
+
+// Actual logo artwork extracted from the approved instructor introduction deck.
+export const partnerVisuals = [
+  {
+    name: "The Knowledge Academy",
+    image: "/manus-storage/knowledge-academy_e083af95.webp",
+  },
+  { name: "ZAKA", image: "/manus-storage/zaka_4ba8bea6.webp" },
+  {
+    name: "Huawei ICT Talent Bank",
+    image: "/manus-storage/huawei-talent-bank_e0ad21bc.webp",
+  },
+  { name: "ITIDA and TIEC", image: "/manus-storage/itida-tiec_07aced67.webp" },
+  {
+    name: "Samsung Innovation Campus",
+    image: "/manus-storage/samsung-innovation-campus_fbb9862e.webp",
+  },
+  { name: "SDAIA", image: "/manus-storage/sdaia_b31dcec7.webp" },
 ];

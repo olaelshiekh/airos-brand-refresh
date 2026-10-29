@@ -16,12 +16,21 @@ import {
   SectionTitle,
   SolutionCards,
 } from "@/components/BrandSections";
+import {
+  AtlasContours,
+  CapabilityScroll,
+  PartnerTicker,
+  ProjectGallery,
+} from "@/components/OriginalVisuals";
 import { brandAssets } from "@/lib/site-content";
 
 export default function Home() {
   return (
     <>
       <section className="home-hero airos-grid-bg" aria-labelledby="hero-title">
+        <div className="hero-route-backdrop" aria-hidden="true">
+          <AtlasContours />
+        </div>
         <div className="shell hero-grid">
           <div className="hero-copy">
             <p className="airos-kicker">
@@ -109,6 +118,8 @@ export default function Home() {
         </div>
       </section>
 
+      <CapabilityScroll />
+
       <section className="section difference-section airos-grid-bg">
         <div className="shell">
           <SectionTitle
@@ -127,6 +138,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <ProjectGallery />
 
       <section className="section academy-section" id="academy">
         <div className="shell">
@@ -170,6 +183,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <PartnerTicker />
 
       <section className="values-section airos-grid-bg" id="about">
         <div className="shell values-content">

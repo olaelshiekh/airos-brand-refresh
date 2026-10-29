@@ -10,6 +10,7 @@ import {
   AboutPage,
   ContactPage,
   EventsPage,
+  ProjectsPage,
   SolutionsPage,
 } from "./pages/SitePages";
 
@@ -42,6 +43,7 @@ export default function App() {
             <Switch>
               <Route path="/" component={Home} />
               <Route path="/solutions" component={SolutionsPage} />
+              <Route path="/projects" component={ProjectsPage} />
               <Route path="/academy" component={Trainings} />
               <Route path="/trainings" component={Trainings} />
               <Route path="/events" component={EventsPage} />

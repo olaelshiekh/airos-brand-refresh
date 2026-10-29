@@ -39,6 +39,14 @@ export default function Trainings() {
                 key={programme.id}
                 id={programme.id}
               >
+                <div className="programme-visual">
+                  <img
+                    src={programme.image}
+                    alt={programme.imageAlt}
+                    loading="lazy"
+                  />
+                  <span>AI-ROS ACADEMY · ROUTE {programme.number}</span>
+                </div>
                 <div className="programme-top">
                   <span className="airos-bignum">{programme.number}</span>
                   <span className="airos-pill">{programme.duration}</span>

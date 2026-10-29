@@ -1,12 +1,24 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, useLocation } from "wouter";
-import { ArrowUpRight, Linkedin, Mail, Menu, Phone, X } from "lucide-react";
+import {
+  ArrowUp,
+  ArrowUpRight,
+  Linkedin,
+  Mail,
+  Menu,
+  Pause,
+  Phone,
+  Play,
+  X,
+} from "lucide-react";
 import { BrandMark } from "./BrandMark";
 import { brandAssets, navigation } from "@/lib/site-content";
 
 export function SiteLayout({ children }: { children: ReactNode }) {
   const [location] = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [motionPaused, setMotionPaused] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
   const menuPanel = useRef<HTMLElement>(null);
 
@@ -15,6 +27,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     const titles: Record<string, string> = {
       "/": "Innovating Today, Sustaining Tomorrow",
       "/solutions": "Solutions",
+      "/projects": "Projects",
       "/academy": "Academy",
       "/trainings": "Academy",
       "/events": "Events",
@@ -30,6 +43,51 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       window.scrollTo({ top: 0, behavior: "instant" });
     }
   }, [location]);
+
+  useEffect(() => {
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (reduced) return;
+    const elements = Array.from(
+      document.querySelectorAll<HTMLElement>(
+        ".section-title, .solution-card, .project-visual-card, .programme-card, .event-card, .values-content"
+      )
+    );
+    const observer = new IntersectionObserver(
+      entries =>
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-revealed");
+            observer.unobserve(entry.target);
+          }
+        }),
+      { threshold: 0.1 }
+    );
+    elements.forEach((element, index) => {
+      if (element.getBoundingClientRect().top < window.innerHeight * 0.9)
+        return;
+      element.classList.add("motion-reveal");
+      element.style.setProperty("--reveal-delay", `${(index % 3) * 45}ms`);
+      observer.observe(element);
+    });
+    const focus = (event: FocusEvent) =>
+      (event.target as HTMLElement)
+        ?.closest(".motion-reveal")
+        ?.classList.add("is-revealed");
+    document.addEventListener("focusin", focus);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("focusin", focus);
+    };
+  }, [location]);
+
+  useEffect(() => {
+    const update = () => setShowBackToTop(window.scrollY > 800);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -73,7 +131,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   }, [menuOpen]);
 
   return (
-    <div className="airos-site">
+    <div className={`airos-site ${motionPaused ? "motion-paused" : ""}`}>
       <a className="skip-link" href="#main-content">
         Skip to content
       </a>
@@ -129,16 +187,28 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                 setMenuOpen(false);
             }}
           >
-            <Link href="/">
+            <Link href="/" aria-current={location === "/" ? "page" : undefined}>
               Home <ArrowUpRight size={19} />
             </Link>
             {navigation.map(item => (
-              <Link key={item.href} href={item.href}>
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={
+                  location === item.href ||
+                  (item.href === "/academy" && location === "/trainings")
+                    ? "page"
+                    : undefined
+                }
+              >
                 {item.label}
                 <ArrowUpRight size={19} />
               </Link>
             ))}
-            <Link href="/contact">
+            <Link
+              href="/contact"
+              aria-current={location === "/contact" ? "page" : undefined}
+            >
               Book a meeting <ArrowUpRight size={19} />
             </Link>
             <p>Innovating Today, Sustaining Tomorrow.</p>
@@ -221,6 +291,37 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           <img src={brandAssets.mark} alt="" width="32" height="32" />
         </div>
       </footer>
+      <button
+        className="page-motion-toggle"
+        type="button"
+        aria-pressed={motionPaused}
+        onClick={() => setMotionPaused(value => !value)}
+        aria-label={
+          motionPaused
+            ? "Resume decorative page animations"
+            : "Pause decorative page animations"
+        }
+      >
+        {motionPaused ? <Play size={14} /> : <Pause size={14} />}
+        <span>{motionPaused ? "Play motion" : "Pause motion"}</span>
+      </button>
+      <button
+        className={`back-to-top ${showBackToTop ? "is-visible" : ""}`}
+        type="button"
+        aria-label="Back to top"
+        tabIndex={showBackToTop ? 0 : -1}
+        onClick={() =>
+          window.scrollTo({
+            top: 0,
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+              .matches
+              ? "instant"
+              : "smooth",
+          })
+        }
+      >
+        <ArrowUp size={19} />
+      </button>
     </div>
   );
 }
