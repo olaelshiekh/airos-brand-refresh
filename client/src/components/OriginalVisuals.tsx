@@ -16,6 +16,7 @@ import {
   partnerVisuals,
 } from "@/lib/site-content";
 import { SectionTitle } from "@/components/BrandSections";
+import { useSiteMotion } from "@/contexts/MotionContext";
 
 const scrollBehavior = (): ScrollBehavior =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -136,6 +137,7 @@ export function CapabilityScroll() {
   const scene = useRef<HTMLElement>(null);
   const viewport = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const { enabled } = useSiteMotion();
 
   useEffect(() => {
     const root = scene.current;
@@ -148,7 +150,7 @@ export function CapabilityScroll() {
     const update = () => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
-        if (media.matches) {
+        if (media.matches && enabled) {
           const rect = root.getBoundingClientRect();
           const travel = Math.max(1, rect.height - window.innerHeight);
           const progress = Math.min(1, Math.max(0, -rect.top / travel));
@@ -162,7 +164,7 @@ export function CapabilityScroll() {
             );
             return previous === next ? previous : next;
           });
-        } else {
+        } else if (!media.matches) {
           const progress =
             rail.scrollLeft / Math.max(1, rail.scrollWidth - rail.clientWidth);
           root.style.setProperty("--gallery-progress", `${progress * 100}%`);
@@ -176,22 +178,25 @@ export function CapabilityScroll() {
       });
     };
     update();
-    const observer = new ResizeObserver(update);
-    observer.observe(root);
-    observer.observe(rail);
+    const observer =
+      typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(update)
+        : undefined;
+    observer?.observe(root);
+    observer?.observe(rail);
     window.addEventListener("scroll", update, { passive: true });
     rail.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update);
     media.addEventListener("change", update);
     return () => {
-      observer.disconnect();
+      observer?.disconnect();
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", update);
       rail.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
       media.removeEventListener("change", update);
     };
-  }, []);
+  }, [enabled]);
 
   const goTo = (index: number, instant = false) => {
     const root = scene.current;
@@ -199,6 +204,7 @@ export function CapabilityScroll() {
     if (!root || !rail) return;
     const progress = index / (capabilityStories.length - 1);
     if (
+      enabled &&
       window.matchMedia(
         "(min-width: 861px) and (prefers-reduced-motion: no-preference)"
       ).matches
@@ -215,7 +221,7 @@ export function CapabilityScroll() {
       if (card)
         rail.scrollTo({
           left: card.offsetLeft,
-          behavior: instant ? "instant" : scrollBehavior(),
+          behavior: instant || !enabled ? "instant" : scrollBehavior(),
         });
     }
   };
@@ -312,13 +318,14 @@ export function CapabilityScroll() {
 
 export function ProjectGallery() {
   const rail = useRef<HTMLDivElement>(null);
+  const { enabled } = useSiteMotion();
   const move = (direction: -1 | 1) => {
     const el = rail.current;
     if (!el) return;
     const card = el.querySelector<HTMLElement>(".project-visual-card");
     el.scrollBy({
       left: direction * ((card?.offsetWidth ?? 340) + 22),
-      behavior: scrollBehavior(),
+      behavior: enabled ? scrollBehavior() : "instant",
     });
   };
   return (

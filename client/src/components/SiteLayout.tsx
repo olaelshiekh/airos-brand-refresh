@@ -13,12 +13,18 @@ import {
 } from "lucide-react";
 import { BrandMark } from "./BrandMark";
 import { brandAssets, navigation } from "@/lib/site-content";
+import { useSiteMotion } from "@/contexts/MotionContext";
 
 export function SiteLayout({ children }: { children: ReactNode }) {
   const [location] = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const [motionPaused, setMotionPaused] = useState(false);
+  const {
+    paused: motionPaused,
+    reduced,
+    enabled,
+    toggle: toggleMotion,
+  } = useSiteMotion();
   const menuButton = useRef<HTMLButtonElement>(null);
   const menuPanel = useRef<HTMLElement>(null);
 
@@ -28,13 +34,14 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       "/": "Innovating Today, Sustaining Tomorrow",
       "/solutions": "Solutions",
       "/projects": "Projects",
+      "/blog": "Insights & Articles",
       "/academy": "Academy",
-      "/trainings": "Academy",
+      "/trainings": "Trainings",
       "/events": "Events",
       "/about": "About",
       "/contact": "Let’s talk",
     };
-    document.title = `AI-ROS — ${titles[location] ?? "Page not found"}`;
+    document.title = `AI-ROS — ${titles[location] ?? (location.startsWith("/projects/") ? "Projects" : "Page not found")}`;
     if (window.location.hash) {
       requestAnimationFrame(() =>
         document.getElementById(window.location.hash.slice(1))?.scrollIntoView()
@@ -45,15 +52,15 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   }, [location]);
 
   useEffect(() => {
-    const reduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    if (reduced) return;
     const elements = Array.from(
       document.querySelectorAll<HTMLElement>(
-        ".section-title, .solution-card, .project-visual-card, .programme-card, .event-card, .values-content"
+        ".page-hero .shell, .section-title, .solution-card, .solution-detail, .agent-comparison > article, .project-visual-card, .project-catalog-card, .project-case-study, .programme-card, .event-card, .values-content, .about-intro > *, .founder-name-panel, .founder-copy, .ecosystem-panel, .contact-aside, .contact-form-card, .learning-approach > *, .contact-band, .event-disclaimer, .project-catalog-note, .blog-topic-panel, .site-footer .footer-grid > div"
       )
     );
+    if (!enabled || typeof IntersectionObserver === "undefined") {
+      elements.forEach(element => element.classList.add("is-revealed"));
+      return;
+    }
     const observer = new IntersectionObserver(
       entries =>
         entries.forEach(entry => {
@@ -65,11 +72,13 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       { threshold: 0.1 }
     );
     elements.forEach((element, index) => {
-      if (element.getBoundingClientRect().top < window.innerHeight * 0.9)
-        return;
       element.classList.add("motion-reveal");
       element.style.setProperty("--reveal-delay", `${(index % 3) * 45}ms`);
-      observer.observe(element);
+      if (element.getBoundingClientRect().top < window.innerHeight * 0.82) {
+        element.classList.add("is-revealed");
+      } else {
+        observer.observe(element);
+      }
     });
     const focus = (event: FocusEvent) =>
       (event.target as HTMLElement)
@@ -80,7 +89,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       observer.disconnect();
       document.removeEventListener("focusin", focus);
     };
-  }, [location]);
+  }, [location, enabled]);
 
   useEffect(() => {
     const update = () => setShowBackToTop(window.scrollY > 800);
@@ -95,7 +104,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setMenuOpen(false);
-        menuButton.current?.focus();
+        requestAnimationFrame(() => menuButton.current?.focus());
       }
       if (event.key === "Tab") {
         const items = [
@@ -131,7 +140,10 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   }, [menuOpen]);
 
   return (
-    <div className={`airos-site ${motionPaused ? "motion-paused" : ""}`}>
+    <div
+      className={`airos-site ${!enabled ? "motion-paused" : ""}`}
+      data-motion={reduced ? "reduced" : motionPaused ? "paused" : "enabled"}
+    >
       <a className="skip-link" href="#main-content">
         Skip to content
       </a>
@@ -147,7 +159,9 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                 href={item.href}
                 aria-current={
                   location === item.href ||
-                  (item.href === "/academy" && location === "/trainings")
+                  (item.href === "/projects" &&
+                    location.startsWith("/projects/")) ||
+                  (item.href === "/trainings" && location === "/academy")
                     ? "page"
                     : undefined
                 }
@@ -196,7 +210,9 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                 href={item.href}
                 aria-current={
                   location === item.href ||
-                  (item.href === "/academy" && location === "/trainings")
+                  (item.href === "/projects" &&
+                    location.startsWith("/projects/")) ||
+                  (item.href === "/trainings" && location === "/academy")
                     ? "page"
                     : undefined
                 }
@@ -205,6 +221,12 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                 <ArrowUpRight size={19} />
               </Link>
             ))}
+            <Link
+              href="/events"
+              aria-current={location === "/events" ? "page" : undefined}
+            >
+              Events <ArrowUpRight size={19} />
+            </Link>
             <Link
               href="/contact"
               aria-current={location === "/contact" ? "page" : undefined}
@@ -216,7 +238,9 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         )}
       </header>
       <main id="main-content" tabIndex={-1}>
-        {children}
+        <div className="route-page" key={location} data-route={location}>
+          {children}
+        </div>
       </main>
       <footer className="site-footer">
         <div className="shell footer-grid">
@@ -241,7 +265,8 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                   {item.label}
                 </Link>
               ))}
-              <Link href="/contact">Contact</Link>
+              <Link href="/events">Events</Link>
+              <Link href="/academy">AI-ROS Academy</Link>
             </nav>
           </div>
           <div>
@@ -295,11 +320,9 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         className="page-motion-toggle"
         type="button"
         aria-pressed={motionPaused}
-        onClick={() => setMotionPaused(value => !value)}
+        onClick={toggleMotion}
         aria-label={
-          motionPaused
-            ? "Resume decorative page animations"
-            : "Pause decorative page animations"
+          motionPaused ? "Resume site animations" : "Pause site animations"
         }
       >
         {motionPaused ? <Play size={14} /> : <Pause size={14} />}

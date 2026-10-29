@@ -13,6 +13,7 @@ import {
   Workflow,
 } from "lucide-react";
 import { events, learningSteps, solutions } from "@/lib/site-content";
+import { useSiteMotion } from "@/contexts/MotionContext";
 
 export function SectionTitle({
   kicker,
@@ -63,6 +64,8 @@ export function SolutionCards() {
 
 export function AgentExplainer() {
   const [example, setExample] = useState<"meeting" | "report">("meeting");
+  const [animateExample, setAnimateExample] = useState(false);
+  const { enabled } = useSiteMotion();
   const meeting = example === "meeting";
   return (
     <div className="agent-comparison">
@@ -106,19 +109,29 @@ export function AgentExplainer() {
           <button
             type="button"
             aria-pressed={meeting}
-            onClick={() => setExample("meeting")}
+            onClick={event => {
+              setAnimateExample(event.detail > 0);
+              setExample("meeting");
+            }}
           >
             Schedule a meeting
           </button>
           <button
             type="button"
             aria-pressed={!meeting}
-            onClick={() => setExample("report")}
+            onClick={event => {
+              setAnimateExample(event.detail > 0);
+              setExample("report");
+            }}
           >
             Prepare a report
           </button>
         </div>
-        <ol className="agent-workflow" aria-live="polite">
+        <ol
+          className={`agent-workflow ${enabled && animateExample ? "tab-content-enter" : "tab-content-instant"}`}
+          aria-live="polite"
+          key={example}
+        >
           <li>
             <CircleDot size={17} />
             <span>
@@ -157,6 +170,8 @@ export function AgentExplainer() {
 
 export function LearningRoadmap() {
   const [selected, setSelected] = useState(0);
+  const [animateTab, setAnimateTab] = useState(false);
+  const { enabled } = useSiteMotion();
   const step = learningSteps[selected];
   return (
     <div className="roadmap">
@@ -181,7 +196,10 @@ export function LearningRoadmap() {
                   ? "is-done"
                   : ""
             }
-            onClick={() => setSelected(index)}
+            onClick={event => {
+              setAnimateTab(event.detail > 0);
+              setSelected(index);
+            }}
             onKeyDown={event => {
               let next = index;
               if (event.key === "ArrowRight")
@@ -193,6 +211,7 @@ export function LearningRoadmap() {
               else if (event.key === "End") next = learningSteps.length - 1;
               else return;
               event.preventDefault();
+              setAnimateTab(false);
               setSelected(next);
               document.getElementById(`stage-tab-${next}`)?.focus();
             }}
@@ -213,16 +232,25 @@ export function LearningRoadmap() {
         id="stage-panel"
         role="tabpanel"
         aria-labelledby={`stage-tab-${selected}`}
+        aria-live="polite"
         tabIndex={0}
       >
-        <div>
+        <div
+          className={
+            enabled && animateTab ? "tab-content-enter" : "tab-content-instant"
+          }
+          key={step.title}
+        >
           <p className="airos-kicker">
             STAGE {String(selected + 1).padStart(2, "0")} / 06
           </p>
           <h3>{step.subtitle}</h3>
           <p>{step.description}</p>
         </div>
-        <div className="roadmap-outcome">
+        <div
+          className={`roadmap-outcome ${enabled && animateTab ? "tab-content-enter" : "tab-content-instant"}`}
+          key={step.outcome}
+        >
           <span className="airos-iconbox">
             <GraduationIcon />
           </span>

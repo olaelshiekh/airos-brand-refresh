@@ -23,9 +23,20 @@ export const brandAssets = {
 export const navigation = [
   { label: "Solutions", href: "/solutions" },
   { label: "Projects", href: "/projects" },
-  { label: "Academy", href: "/academy" },
-  { label: "Events", href: "/events" },
+  { label: "Blog", href: "/blog" },
+  { label: "Trainings", href: "/trainings" },
   { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+];
+
+export const blogTopics = [
+  "All Topics",
+  "AI & Machine Learning",
+  "IoT",
+  "Smart Cities",
+  "Agriculture",
+  "Industry 4.0",
+  "Sustainability",
 ];
 
 export const solutions = [
@@ -282,6 +293,7 @@ export const capabilityStories = [
 export const featuredProjects = [
   {
     title: "GROW+ Smart Plant Doctor",
+    slug: "grow-plus-smart-plant-doctor",
     category: "Agritech",
     description: "AI-powered plant disease detection platform.",
     tags: ["IoT", "Drones", "Edge computing"],
@@ -290,6 +302,7 @@ export const featuredProjects = [
   },
   {
     title: "Cozy Earth Air Quality System",
+    slug: "cozy-earth-air-quality",
     category: "Environment",
     description: "VR-powered plant recommendation engine.",
     tags: ["AI sensors", "Edge computing", "Sustainability"],
@@ -298,12 +311,22 @@ export const featuredProjects = [
   },
   {
     title: "Industrial Predictive Maintenance Platform",
+    slug: "industrial-predictive-maintenance",
     category: "Industrial AI",
     description:
       "A machine-learning platform for equipment-failure prediction.",
     tags: ["IoT", "Machine learning", "Edge computing"],
     image: brandAssets.originalVisuals.industry,
     imageAlt: "An engineer working with industrial equipment",
+  },
+  {
+    title: "Smart Irrigation Control System",
+    slug: "smart-irrigation-control",
+    category: "Smart Agriculture",
+    description: "IoT-based irrigation optimization system.",
+    tags: ["IoT", "Irrigation", "Agriculture"],
+    image: brandAssets.originalVisuals.agritech,
+    imageAlt: "Agricultural field rows viewed from above",
   },
 ];
 

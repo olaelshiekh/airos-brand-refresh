@@ -1,5 +1,5 @@
 import { useState, type FormEvent, type ReactNode } from "react";
-import { Link } from "wouter";
+import { Link, useParams } from "wouter";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -10,6 +10,7 @@ import {
   Phone,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useSiteMotion } from "@/contexts/MotionContext";
 import {
   ContactBand,
   EventCards,
@@ -17,7 +18,12 @@ import {
   SectionTitle,
 } from "@/components/BrandSections";
 import { AtlasContours } from "@/components/OriginalVisuals";
-import { ecosystem, featuredProjects, solutions } from "@/lib/site-content";
+import {
+  blogTopics,
+  ecosystem,
+  featuredProjects,
+  solutions,
+} from "@/lib/site-content";
 
 export function PageHero({
   kicker,
@@ -155,6 +161,101 @@ export function EventsPage() {
             or speaking participation. Check the official websites for current
             editions and schedules.
           </p>
+        </div>
+      </section>
+      <ContactBand />
+    </>
+  );
+}
+
+export function BlogPage() {
+  const [selectedTopic, setSelectedTopic] = useState(0);
+  const [animateTopic, setAnimateTopic] = useState(false);
+  const { enabled } = useSiteMotion();
+  const selectTopic = (index: number) => setSelectedTopic(index);
+  return (
+    <>
+      <PageHero
+        kicker="KNOWLEDGE & RESEARCH CENTER"
+        title={
+          <>
+            Insights{" "}
+            <span className="airos-gradient-text">&amp; Articles.</span>
+          </>
+        }
+        description="Thought leadership and industry insights from the AI-ROS team."
+      />
+      <section className="section">
+        <div className="shell">
+          <div className="blog-topic-panel airos-card">
+            <div>
+              <p className="airos-kicker">EXPLORE BY TOPIC</p>
+              <div
+                className="blog-topic-tabs"
+                role="tablist"
+                aria-label="Article topics"
+              >
+                {blogTopics.map((topic, index) => (
+                  <button
+                    key={topic}
+                    id={`blog-topic-${index}`}
+                    type="button"
+                    role="tab"
+                    aria-selected={selectedTopic === index}
+                    aria-controls="blog-topic-content"
+                    tabIndex={selectedTopic === index ? 0 : -1}
+                    onClick={event => {
+                      setAnimateTopic(event.detail > 0);
+                      selectTopic(index);
+                    }}
+                    onKeyDown={event => {
+                      let next = index;
+                      if (event.key === "ArrowRight")
+                        next = (index + 1) % blogTopics.length;
+                      else if (event.key === "ArrowLeft")
+                        next =
+                          (index + blogTopics.length - 1) % blogTopics.length;
+                      else if (event.key === "Home") next = 0;
+                      else if (event.key === "End")
+                        next = blogTopics.length - 1;
+                      else return;
+                      event.preventDefault();
+                      setAnimateTopic(false);
+                      setSelectedTopic(next);
+                      document.getElementById(`blog-topic-${next}`)?.focus();
+                    }}
+                  >
+                    {topic}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div
+              id="blog-topic-content"
+              className={`blog-topic-content ${enabled && animateTopic ? "tab-content-enter" : "tab-content-instant"}`}
+              key={blogTopics[selectedTopic]}
+              role="tabpanel"
+              aria-labelledby={`blog-topic-${selectedTopic}`}
+              tabIndex={0}
+              aria-live="polite"
+            >
+              <p className="airos-kicker">
+                {selectedTopic === 0
+                  ? "AI-ROS INSIGHTS"
+                  : blogTopics[selectedTopic]}
+              </p>
+              <h2>
+                {selectedTopic === 0
+                  ? "Ideas for practical AI."
+                  : `Explore ${blogTopics[selectedTopic]}.`}
+              </h2>
+              <p>
+                The article archive is not included in this website preview. Its
+                published route and topic navigation are preserved for the
+                AI-ROS site.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
       <ContactBand />
@@ -446,6 +547,20 @@ export function ContactPage() {
                   <option value="" disabled>
                     Select a starting point
                   </option>
+                  {form.interest &&
+                    ![
+                      "AI Agents",
+                      "AI & Robotics",
+                      "Adaptive Learning",
+                      "Data Intelligence",
+                      "AI Career Accelerator",
+                      "AI Automation",
+                      "AI & Social Entrepreneurship",
+                      "Book a meeting",
+                      "Something else",
+                    ].includes(form.interest) && (
+                      <option value={form.interest}>{form.interest}</option>
+                    )}
                   {[
                     "AI Agents",
                     "AI & Robotics",
@@ -556,6 +671,12 @@ export function ProjectsPage() {
                       <span key={tag}>{tag}</span>
                     ))}
                   </div>
+                  <Link
+                    className="text-link"
+                    href={`/projects/${project.slug}`}
+                  >
+                    View case study <ArrowUpRight size={16} />
+                  </Link>
                   <InquiryLink subject={project.title}>
                     Discuss a similar challenge
                   </InquiryLink>
@@ -568,6 +689,47 @@ export function ProjectsPage() {
             website. Visuals are illustrative and no performance statistics are
             presented.
           </p>
+        </div>
+      </section>
+      <ContactBand />
+    </>
+  );
+}
+
+export function ProjectCaseStudyPage() {
+  const { slug } = useParams<{ slug: string }>();
+  const project = featuredProjects.find(item => item.slug === slug);
+  if (!project) return <ProjectsPage />;
+  return (
+    <>
+      <PageHero
+        kicker="AI-ROS PROJECT CASE STUDY"
+        title={project.title}
+        description={project.description}
+      />
+      <section className="section">
+        <div className="shell project-case-study airos-card">
+          <div className="project-case-study-media">
+            <img src={project.image} alt={project.imageAlt} />
+          </div>
+          <div className="project-case-study-copy">
+            <p className="airos-kicker">{project.category}</p>
+            <h2>{project.title}</h2>
+            <p>{project.description}</p>
+            <p className="project-catalog-note">
+              This refresh carries over the published project listing only. It
+              does not add client, implementation, or impact details that have
+              not been supplied for this page.
+            </p>
+            <div className="project-case-study-actions">
+              <InquiryLink subject={project.title}>
+                Discuss a similar challenge
+              </InquiryLink>
+              <Link className="text-link" href="/projects">
+                <ArrowRight size={16} /> Back to projects
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
       <ContactBand />
