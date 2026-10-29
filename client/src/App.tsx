@@ -1,35 +1,57 @@
-/**
- * Terra-Tech Atlas: Routes use the same training-atlas entry for the brand-refresh preview.
- * The SiteBackground is owned by the shared page composition, ready to extend to future routes.
- */
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Route, Switch } from "wouter";
+import { Link, Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { SiteLayout } from "./components/SiteLayout";
 import Home from "./pages/Home";
 import Trainings from "./pages/Trainings";
+import {
+  AboutPage,
+  ContactPage,
+  EventsPage,
+  SolutionsPage,
+} from "./pages/SitePages";
 
-function Router() {
+function NotFound() {
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/trainings" component={Trainings} />
-      <Route component={Home} />
-    </Switch>
+    <section className="page-hero not-found airos-grid-bg">
+      <div className="shell">
+        <p className="airos-kicker">404 · PAGE NOT FOUND</p>
+        <h1>
+          Let’s get you
+          <br />
+          <span className="airos-gradient-text">back on track.</span>
+        </h1>
+        <p>This page isn’t part of the refreshed website.</p>
+        <Link className="airos-btn airos-btn--primary" href="/">
+          Back to AI-ROS
+        </Link>
+      </div>
+    </section>
   );
 }
 
 export default function App() {
   return (
     <ErrorBoundary>
-      <ThemeProvider defaultTheme="dark">
+      <ThemeProvider defaultTheme="light">
         <TooltipProvider>
           <Toaster />
-          <Router />
+          <SiteLayout>
+            <Switch>
+              <Route path="/" component={Home} />
+              <Route path="/solutions" component={SolutionsPage} />
+              <Route path="/academy" component={Trainings} />
+              <Route path="/trainings" component={Trainings} />
+              <Route path="/events" component={EventsPage} />
+              <Route path="/about" component={AboutPage} />
+              <Route path="/contact" component={ContactPage} />
+              <Route component={NotFound} />
+            </Switch>
+          </SiteLayout>
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );
 }
-
