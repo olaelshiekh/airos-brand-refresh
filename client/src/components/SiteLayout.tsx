@@ -17,6 +17,7 @@ import { prefersReducedMotion, useSiteMotion } from "@/contexts/MotionContext";
 
 export function SiteLayout({ children }: { children: ReactNode }) {
   const [location] = useLocation();
+  const isTrainingRoute = location === "/trainings" || location === "/academy";
   const [menuOpen, setMenuOpen] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const {
@@ -141,7 +142,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
 
   return (
     <div
-      className={`airos-site ${!enabled ? "motion-paused" : ""}`}
+      className={`airos-site ${isTrainingRoute ? "training-site-route" : ""} ${!enabled ? "motion-paused" : ""}`}
       data-motion={reduced ? "reduced" : motionPaused ? "paused" : "enabled"}
     >
       <a className="skip-link" href="#main-content">
@@ -150,7 +151,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       <header className="site-header">
         <div className="shell header-inner">
           <Link href="/" className="header-brand" aria-label="AI-ROS home">
-            <BrandMark />
+            <BrandMark variant={isTrainingRoute ? "white" : "brand"} />
           </Link>
           <nav className="desktop-nav" aria-label="Primary navigation">
             {navigation.map(item => (
@@ -246,7 +247,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         <div className="shell footer-grid">
           <div className="footer-brand">
             <Link href="/" aria-label="AI-ROS home">
-              <BrandMark />
+              <BrandMark variant={isTrainingRoute ? "white" : "brand"} />
             </Link>
             <p>
               Innovating Today,
@@ -313,7 +314,12 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           <Link href="/">
             ai-ros.ai <ArrowUpRight size={14} />
           </Link>
-          <img src={brandAssets.mark} alt="" width="32" height="32" />
+          <img
+            src={isTrainingRoute ? brandAssets.whiteMark : brandAssets.mark}
+            alt=""
+            width="32"
+            height="32"
+          />
         </div>
       </footer>
       <button

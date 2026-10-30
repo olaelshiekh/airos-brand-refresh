@@ -7,7 +7,9 @@ import {
 
 export const brandAssets = {
   logo: "/manus-storage/airos-logo_d5de32ee.png",
+  whiteLogo: "/manus-storage/airos-logo-white_5163adde.png",
   mark: "/manus-storage/airos-mark_637af318.png",
+  whiteMark: "/manus-storage/airos-mark-white_7a4240a1.png",
   originalVisuals: {
     aiStrategy: "/manus-storage/ai-strategy_e7f82735.webp",
     robotics: "/manus-storage/robotics_e7b0afcf.webp",
@@ -21,6 +23,7 @@ export const brandAssets = {
 };
 
 export const navigation = [
+  { label: "Home", href: "/" },
   { label: "Solutions", href: "/solutions" },
   { label: "Projects", href: "/projects" },
   { label: "Blog", href: "/blog" },
@@ -157,53 +160,79 @@ export const learningSteps = [
 
 export const programmes = [
   {
-    id: "accelerator",
+    id: "programme-01",
     number: "01",
-    image: brandAssets.originalVisuals.academy,
-    imageAlt: "People learning together in a technology classroom",
+    route: "Flagship route",
+    image: "/manus-storage/ai-career_9d41d126.jpg",
+    imageAlt: "AI Career Accelerator programme artwork",
     title: "AI Career Accelerator",
+    promise: "Build the skills your next role requires.",
     duration: "3–6 months",
     audience: "Professionals & students",
     description:
-      "A hands-on route from AI foundations to practical projects and portfolio-ready capability.",
+      "An intensive learning route for professionals and students ready to translate AI curiosity into practical, portfolio-ready capability.",
     outcomes: [
       "Machine learning and data foundations",
       "Applied AI strategy and implementation",
       "Portfolio-building, mentoring and career guidance",
     ],
+    format: "Hybrid (online & cohort)",
+    level: "Foundational to intermediate",
+    output: "Portfolio + certification",
+    application: "Personal/professional build",
   },
   {
-    id: "automation",
+    id: "programme-02",
     number: "02",
-    image: brandAssets.originalVisuals.aiStrategy,
-    imageAlt: "Artificial intelligence concepts on a digital display",
-    title: "AI Automation",
-    duration: "3 weeks",
-    audience: "Teams & professionals",
+    route: "Enterprise route",
+    image: "/manus-storage/ai-automation_b60011c1.jpg",
+    imageAlt: "AI Automation for Business & Operations programme artwork",
+    title: "AI Automation for Business & Operations",
+    promise: "Turn manual workflow into automated intelligence.",
+    duration: "2–4 months",
+    audience: "Teams & ops leaders",
     description:
-      "A focused programme for connecting tools, prototyping faster and putting useful AI workflows to work.",
+      "For teams, founders, and operational leaders looking to design and deploy AI-driven automation inside their actual operations.",
     outcomes: [
-      "No-code and low-code workflow design",
-      "AI API integration patterns",
-      "Reusable automations for rapid prototyping",
+      "Workflow mapping and automation design",
+      "Custom tooling and agent integration",
+      "Measurement, governance, and sustained impact",
     ],
+    format: "Online / workshops",
+    level: "Intermediate to advanced",
+    output: "Live automated workflow",
+    application: "Operational rollout",
   },
   {
-    id: "impact",
+    id: "programme-03",
     number: "03",
-    image: brandAssets.originalVisuals.agritech,
-    imageAlt: "Agricultural fields viewed from above",
-    title: "AI & Social Entrepreneurship",
-    duration: "Customisable",
-    audience: "Startups & organisations",
+    route: "Impact route",
+    image: "/manus-storage/ai-social_6f791f8f.jpg",
+    imageAlt: "AI for Social Impact & Sustainable Innovation programme artwork",
+    title: "AI for Social Impact & Sustainable Innovation",
+    promise: "Apply AI to real-world community and environmental challenges.",
+    duration: "Customised",
+    audience: "Innovators & NGOs",
     description:
-      "Apply AI to social-impact challenges and develop ideas aligned with the Sustainable Development Goals.",
+      "A route for NGOs, founders, and community organisations applying artificial intelligence to sustainability, SDGs, and local resilience.",
     outcomes: [
-      "A curriculum shaped around your SDG focus",
-      "AI solutions for social-impact challenges",
-      "Mentoring for implementation and business models",
+      "SDG-aligned AI solution framing",
+      "Community-centred product prototyping",
+      "Partnership, funding, and scaling roadmaps",
     ],
+    format: "Custom sprint",
+    level: "All levels",
+    output: "Prototype + roadmap",
+    application: "Community & SDG initiatives",
   },
+];
+
+export const programmeComparison = [
+  { label: "Duration", values: ["3–6 months", "2–4 months", "Flexible"] },
+  { label: "Format", values: programmes.map(item => item.format) },
+  { label: "Level", values: programmes.map(item => item.level) },
+  { label: "Output", values: programmes.map(item => item.output) },
+  { label: "Application", values: programmes.map(item => item.application) },
 ];
 
 // Event references from the supplied brand guide, not claims of attendance or partnership.
