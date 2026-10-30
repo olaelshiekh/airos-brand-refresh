@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { BrandMark } from "./BrandMark";
 import { brandAssets, navigation } from "@/lib/site-content";
-import { useSiteMotion } from "@/contexts/MotionContext";
+import { prefersReducedMotion, useSiteMotion } from "@/contexts/MotionContext";
 
 export function SiteLayout({ children }: { children: ReactNode }) {
   const [location] = useLocation();
@@ -336,10 +336,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         onClick={() =>
           window.scrollTo({
             top: 0,
-            behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
-              .matches
-              ? "instant"
-              : "smooth",
+            behavior: prefersReducedMotion() ? "instant" : "smooth",
           })
         }
       >

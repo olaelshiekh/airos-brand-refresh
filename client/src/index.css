@@ -3871,3 +3871,18 @@
     font-size: 30px;
   }
 }
+
+/* A single predictable pause state for every keyframe and transition on the site. */
+.motion-paused,
+.motion-paused *,
+.motion-paused *::before,
+.motion-paused *::after {
+  animation-play-state: paused !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+.motion-paused .motion-reveal,
+.motion-paused .motion-reveal.is-revealed {
+  opacity: 1 !important;
+  transform: none !important;
+}

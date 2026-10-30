@@ -16,12 +16,15 @@ import {
   partnerVisuals,
 } from "@/lib/site-content";
 import { SectionTitle } from "@/components/BrandSections";
-import { useSiteMotion } from "@/contexts/MotionContext";
+import {
+  getMotionQuery,
+  listenToMotionQuery,
+  prefersReducedMotion,
+  useSiteMotion,
+} from "@/contexts/MotionContext";
 
 const scrollBehavior = (): ScrollBehavior =>
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ? "instant"
-    : "smooth";
+  prefersReducedMotion() ? "instant" : "smooth";
 
 export function AtlasContours() {
   const id = useId().replace(/:/g, "");
@@ -143,14 +146,14 @@ export function CapabilityScroll() {
     const root = scene.current;
     const rail = viewport.current;
     if (!root || !rail) return;
-    const media = window.matchMedia(
+    const media = getMotionQuery(
       "(min-width: 861px) and (prefers-reduced-motion: no-preference)"
     );
     let frame = 0;
     const update = () => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
-        if (media.matches && enabled) {
+        if (media?.matches && enabled) {
           const rect = root.getBoundingClientRect();
           const travel = Math.max(1, rect.height - window.innerHeight);
           const progress = Math.min(1, Math.max(0, -rect.top / travel));
@@ -164,7 +167,7 @@ export function CapabilityScroll() {
             );
             return previous === next ? previous : next;
           });
-        } else if (!media.matches) {
+        } else if (!media?.matches) {
           const progress =
             rail.scrollLeft / Math.max(1, rail.scrollWidth - rail.clientWidth);
           root.style.setProperty("--gallery-progress", `${progress * 100}%`);
@@ -187,14 +190,14 @@ export function CapabilityScroll() {
     window.addEventListener("scroll", update, { passive: true });
     rail.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update);
-    media.addEventListener("change", update);
+    const unsubscribeMedia = listenToMotionQuery(media, update);
     return () => {
       observer?.disconnect();
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", update);
       rail.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
-      media.removeEventListener("change", update);
+      unsubscribeMedia();
     };
   }, [enabled]);
 
@@ -205,9 +208,9 @@ export function CapabilityScroll() {
     const progress = index / (capabilityStories.length - 1);
     if (
       enabled &&
-      window.matchMedia(
+      getMotionQuery(
         "(min-width: 861px) and (prefers-reduced-motion: no-preference)"
-      ).matches
+      )?.matches
     ) {
       const top = root.getBoundingClientRect().top + window.scrollY;
       window.scrollTo({
@@ -412,15 +415,8 @@ export function ProjectGallery() {
 export function PartnerTicker() {
   const [paused, setPaused] = useState(false);
   const [hovered, setHovered] = useState(false);
-  const [reduced, setReduced] = useState(
-    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  );
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReduced(media.matches);
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
-  }, []);
+  const [focused, setFocused] = useState(false);
+  const { reduced, paused: sitePaused } = useSiteMotion();
   const logos = [...partnerVisuals, ...partnerVisuals];
   return (
     <section
@@ -452,9 +448,14 @@ export function PartnerTicker() {
         )}
       </div>
       <div
-        className={`partner-ticker ${paused || hovered ? "is-paused" : ""}`}
+        className={`partner-ticker ${paused || hovered || focused || sitePaused ? "is-paused" : ""}`}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
+        onFocusCapture={() => setFocused(true)}
+        onBlurCapture={event => {
+          if (!event.currentTarget.contains(event.relatedTarget as Node | null))
+            setFocused(false);
+        }}
       >
         <div className="partner-ticker-track">
           {logos.map((logo, index) => (
